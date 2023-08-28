@@ -1,0 +1,20 @@
+#carousell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  overflow: hidden;
+  width: 100%;
+}
+
+#inner {
+  white-space: nowrap;
+  transition: transform 0.3s;
+  width: 100%;
+}
+
+#carousell-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
