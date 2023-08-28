@@ -12,10 +12,12 @@ function LoanProcessModal({
   storeItems,
   setStoreItems,
 }) {
+  // not sure if this works yet...
   const { setReturnAppointments } = useContext(RequestContext);
   const handleLoanApproval = async () => {
+    console.log(request);
     const response = await updateStoreItemsPostSizing(request);
-    const newList = storeItems.map((storeItem) => {
+    const newList = storeItems.items.map((storeItem) => {
       const listLocation = response.findIndex(
         (responseItem) => storeItem.id === responseItem.id
       );
@@ -26,7 +28,7 @@ function LoanProcessModal({
         return storeItem;
       }
     });
-    setStoreItems(newList);
+    setStoreItems({ ...storeItems, items: newList });
     // must remember to change the status of the request
     const newRequest = { ...request, status: "Awaiting Return" };
     const recordedNewRequest = await updateRequest(newRequest.id, newRequest);
@@ -64,6 +66,7 @@ function LoanProcessModal({
                   request={request}
                   setRequestList={setRequestList}
                   itemId={requestedItem.id}
+                  targetQuantity={"quantity"}
                 />
               </li>
             );

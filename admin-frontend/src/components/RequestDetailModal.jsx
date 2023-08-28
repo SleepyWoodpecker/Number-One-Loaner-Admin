@@ -52,7 +52,7 @@ function RequestDetailModal({
       );
 
       const storeResponse = await updateStoreItemsPostRequest(request);
-      const newList = storeItems.map((storeItem) => {
+      const newList = storeItems.items.map((storeItem) => {
         const listLocation = storeResponse.findIndex(
           (responseItem) => storeItem.id === responseItem.id
         );
@@ -63,23 +63,29 @@ function RequestDetailModal({
           return storeItem;
         }
       });
-      setStoreItems(newList);
+      setStoreItems((storeItems) => ({ ...storeItems, items: newList }));
     }
     closeModal();
     // should probably show a user notification afterwards
   };
   return (
     <Modal handleModalClose={closeModal}>
-      <div className="flex justify-around items-center w-full h-5/6 flex-col">
-        <div className="font-semibold text-lg mb-3 flex justify-between w-40">
-          <h2>{request.requester}</h2>
-          <h2>{request.unit}</h2>
+      <div className="flex justify-evenly items-center w-full h-5/6 flex-col">
+        <div>
+          <div className="font-semibold text-lg mb-3 flex justify-between w-40">
+            <h2>{request.requester}</h2>
+            <h2>{request.unit}</h2>
+          </div>
+          <div className="flex flex-col items-center w-40">
+            <h2 className="font-semibold">Sizing: {request.sizingDate}</h2>
+            <h2 className="font-semibold">Return: {request.returnDate}</h2>
+          </div>
         </div>
         <table className="table-fixed">
           <thead>
-            <tr>
-              <th>Item</th>
-              <th>Quantity</th>
+            <tr className="font-semibold text-center">
+              <td>Item</td>
+              <td>Quantity</td>
             </tr>
           </thead>
           <tbody className="grid-cols-2 m-1">
@@ -96,10 +102,6 @@ function RequestDetailModal({
             })}
           </tbody>
         </table>
-        <div className="mb-3 flex flex-col items-center w-40">
-          <h2 className="font-semibold">Sizing: {request.sizingDate}</h2>
-          <h2 className="font-semibold">Return: {request.returnDate}</h2>
-        </div>
       </div>
       <div className="flex justify-evenly">
         <button

@@ -6,7 +6,16 @@ const Store = require("../models/StoreModel");
 // fetch a list of all the store items
 storeRouter.get("/", async (req, res) => {
   const storeItems = await Store.find({});
-  res.status(200).json(storeItems);
+  const sizedItems = [];
+  const items = [];
+  storeItems.forEach((storeItem) => {
+    if (storeItem.name.includes(" - ")) {
+      sizedItems.push(storeItem);
+    } else {
+      items.push(storeItem);
+    }
+  });
+  res.status(200).json({ items, sizedItems });
 });
 
 // fetch a list of an item with a specific ID
@@ -25,15 +34,49 @@ storeRouter.put("/post-request/downstock", async (req, res) => {
   );
   // can do this because map preserves the order of the array
   const storeItemData = await Promise.all(storeItems);
+  let consolidatedSizedItemUpdates = [];
   const updatedItems = requestedItems.map((requestedItem, i) => {
+    console.log();
+    const consolidatedId = requestedItem.consolidatedItemId;
+    if (consolidatedId) {
+      const index = consolidatedSizedItemUpdates.findIndex(
+        (sizedItems) => sizedItems.consolidatedItemId === consolidatedId
+      );
+      if (index !== -1) {
+        consolidatedSizedItemUpdates[index].quantity += Number(
+          requestedItem.quantity
+        );
+      } else {
+        consolidatedSizedItemUpdates.push({
+          consolidatedItemId: consolidatedId,
+          quantity: Number(requestedItem.quantity),
+        });
+      }
+    }
+
     return Store.findByIdAndUpdate(
       requestedItem.id,
       { quantity: storeItemData[i].quantity - requestedItem.quantity },
       { new: true }
     );
   });
-  const newStoreList = await Promise.all(updatedItems);
-  res.status(200).json(newStoreList);
+  // find consolidatedSizedItems
+  const sizedItemsReq = consolidatedSizedItemUpdates.map((sizedItem) =>
+    Store.findById(sizedItem.consolidatedItemId)
+  );
+  const sizedItems = await Promise.all(sizedItemsReq);
+  const updatedSizedItems = consolidatedSizedItemUpdates.map((sizedItem, i) =>
+    Store.findByIdAndUpdate(
+      sizedItem.consolidatedItemId,
+      {
+        quantity: sizedItems[i].quantity - sizedItem.quantity,
+      },
+      { new: true }
+    )
+  );
+  const fullUpdate = await Promise.all([...updatedItems, ...updatedSizedItems]);
+  console.log(fullUpdate);
+  res.status(200).json(fullUpdate);
 });
 
 storeRouter.put("/post-sizing/downstock", async (req, res) => {
@@ -45,7 +88,28 @@ storeRouter.put("/post-sizing/downstock", async (req, res) => {
   );
   // can do this because map preserves the order of the array
   const storeItemData = await Promise.all(storeItems);
+  const consolidatedSizedItemUpdates = [];
   const updatedItems = requestedItems.map((requestedItem, i) => {
+    const consolidatedId = requestedItem.consolidatedItemId;
+    if (consolidatedId) {
+      const index = consolidatedSizedItemUpdates.findIndex(
+        (sizedItems) => sizedItems.consolidatedItemId === consolidatedId
+      );
+      if (index !== -1) {
+        consolidatedSizedItemUpdates[index].quantity += Number(
+          requestedItem.quantity
+        );
+        consolidatedSizedItemUpdates[index].originalQuantity += Number(
+          requestedItem.originalQuantity
+        );
+      } else {
+        consolidatedSizedItemUpdates.push({
+          consolidatedItemId: consolidatedId,
+          quantity: Number(requestedItem.quantity),
+          originalQuantity: Number(requestedItem.originalQuantity),
+        });
+      }
+    }
     return Store.findByIdAndUpdate(
       requestedItem.id,
       {
@@ -56,7 +120,27 @@ storeRouter.put("/post-sizing/downstock", async (req, res) => {
       { new: true }
     );
   });
-  const newStoreList = await Promise.all(updatedItems);
+
+  // if there are sized items among the requested items, 2 quantities have to be adjusted again
+  const sizedItemsReq = consolidatedSizedItemUpdates.map((item) =>
+    Store.findById(item.consolidatedItemId)
+  );
+  const sizedItems = await Promise.all(sizedItemsReq);
+
+  const updatedSizedItems = consolidatedSizedItemUpdates.map((item, i) => {
+    return Store.findByIdAndUpdate(
+      item.consolidatedItemId,
+      {
+        quantity:
+          sizedItems[i].quantity - (item.quantity - item.originalQuantity),
+      },
+      { new: true }
+    );
+  });
+  const newStoreList = await Promise.all([
+    ...updatedItems,
+    ...updatedSizedItems,
+  ]);
   res.status(200).json(newStoreList);
 });
 

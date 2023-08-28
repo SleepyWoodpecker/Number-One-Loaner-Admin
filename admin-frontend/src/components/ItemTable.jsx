@@ -16,11 +16,10 @@ function ItemTable({ storeItems }) {
           </tr>
         </thead>
         <tbody>
-          {storeItems.map((storeItem) => {
+          {storeItems.items.map((storeItem) => {
             if (storeItem.name === "Standard Set") {
               return "";
             }
-            console.log(storeItem.quantity, storeItem.originalQuantity);
             const stockPercentage = Math.round(
               (storeItem.quantity / storeItem.originalQuantity) * 100
             );
