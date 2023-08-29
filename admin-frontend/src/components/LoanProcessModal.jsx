@@ -88,7 +88,7 @@ function LoanProcessModal({
         </div>
         {/* there has to be a confirm loan, where you downstock later */}
         <div
-          className="rounded-md bg-green-200 p-3 font-bold mt-2"
+          className="rounded-md bg-green-200 p-3 mt-2"
           onClick={handleLoanApproval}
         >
           Confirm Loan

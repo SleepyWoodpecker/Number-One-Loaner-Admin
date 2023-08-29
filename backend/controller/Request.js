@@ -1,6 +1,7 @@
 const requestRouter = require("express").Router();
 const mongoose = require("mongoose");
 const Request = require("../models/RequestModel");
+const { verifyUser } = require("../utils/middleware");
 
 // get a list of all the requests
 requestRouter.get("/", async (req, res) => {
@@ -69,7 +70,7 @@ requestRouter.put("/:id", async (req, res) => {
   res.status(200).send(savedRequest);
 });
 
-requestRouter.delete("/:id", async (req, res) => {
+requestRouter.delete("/:id", verifyUser, async (req, res) => {
   const deletedRequest = await Request.findByIdAndDelete(req.params.id);
   console.log(deletedRequest);
   res.status(200).send(deletedRequest);

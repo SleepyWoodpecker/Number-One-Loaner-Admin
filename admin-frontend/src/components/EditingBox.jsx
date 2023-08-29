@@ -68,7 +68,11 @@ function EditingBox({
     <div className="flex justify-around" style={{ width: "6.3rem" }}>
       <div className="m-1 mx-2 w-6 flex justify-center items-center">
         {isEditing ? (
-          <CustomInput input={newQuantity} setInput={setNewQuantity} />
+          <CustomInput
+            input={newQuantity}
+            setInput={setNewQuantity}
+            width={10}
+          />
         ) : (
           newQuantity
         )}

@@ -1,6 +1,7 @@
 import axios from "axios";
 const storeBaseUrl = "/api/store";
 const requestBaseUrl = "/api/request";
+const userBaseUrl = "/api/user/login";
 
 const getStoreItems = async () => {
   const { data: storeItems } = await axios.get(storeBaseUrl);
@@ -74,6 +75,18 @@ const deleteRequest = async (requestId) => {
   return deletedRequest;
 };
 
+const loginUser = async (username, password) => {
+  try {
+    const { data: encodedUser } = await axios.post(`${userBaseUrl}`, {
+      username,
+      password,
+    });
+    return encodedUser;
+  } catch (err) {
+    return err.response.data;
+  }
+};
+
 export {
   getStoreItems,
   getRequests,
@@ -84,4 +97,5 @@ export {
   updateStoreItemsPostSizing,
   updateStoreItemsPostReturn,
   deleteRequest,
+  loginUser,
 };

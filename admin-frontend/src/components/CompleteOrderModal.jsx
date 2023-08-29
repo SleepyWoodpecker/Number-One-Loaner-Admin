@@ -40,6 +40,7 @@ function CompleteOrderModal({ request, setRequestList, closeModal }) {
           className="rounded-md shadow-sm w-40 p-1 bg-red-200 text-center"
           onClick={handleRecordDeletion}
         >
+          {/* need to remember to handle error for expired web token */}
           Clear Record
         </div>
       </div>

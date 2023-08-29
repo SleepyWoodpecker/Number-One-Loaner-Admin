@@ -2,10 +2,11 @@ import React, { useState, useEffect, createContext } from "react";
 import RequestsPage from "./pages/RequestsPage";
 import { getFilteredRequests, getStoreItems } from "./services";
 import StoreItemsPage from "./pages/StoreItemsPage";
-import { RiNewspaperLine } from "react-icons/ri";
+import { RiNewspaperLine, RiAdminLine } from "react-icons/ri";
 import { PiWarehouseDuotone } from "react-icons/pi";
 import { compareDates } from "./Functions";
 import TopBar from "./components/TopBar";
+import UserAuthPage from "./pages/UserAuthPage";
 
 // I am gonig to define the NAV BAR here
 const RequestContext = createContext(null);
@@ -52,6 +53,8 @@ function App() {
     displayedPage = (
       <StoreItemsPage storeItems={storeItems} setStoreItems={setStoreItems} />
     );
+  } else if (activePage === "Auth") {
+    displayedPage = <UserAuthPage />;
   }
 
   const handleRequestsClick = () => {
@@ -60,6 +63,10 @@ function App() {
 
   const handleStoreHouseClick = () => {
     setActivePage("Store Items");
+  };
+
+  const handleAuthClick = () => {
+    setActivePage("Auth");
   };
 
   return (
@@ -103,6 +110,15 @@ function App() {
                 onClick={handleRequestsClick}
                 style={{
                   color: activePage === "Requests" ? "black" : "#bfbdbd",
+                }}
+              />
+            </li>
+            <li>
+              <RiAdminLine
+                size={35}
+                onClick={handleAuthClick}
+                style={{
+                  color: activePage === "Auth" ? "black" : "#bfbdbd",
                 }}
               />
             </li>

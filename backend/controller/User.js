@@ -1,6 +1,9 @@
 const userRouter = require("express").Router();
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { secretKey } = require("../utils/config");
+const { verifyUser } = require("../utils/middleware");
 
 // add a new user
 userRouter.post("/", async (req, res) => {
@@ -22,12 +25,21 @@ userRouter.post("/login", async (req, res) => {
   const { username, password } = req.body;
   // find that user from the DB
   const user = await User.findOne({ username });
+  if (!user) {
+    return res.status(404).send({ error: "Login unsuccessful" });
+  }
   const match = await bcrypt.compare(password, user.hashedPassword);
-
+  const modifiedUser = {
+    username: user.username,
+    hashedPassword: user.hashedPassword,
+    id: user._id,
+  };
+  // if the match is successful, add a jwt to the local storage
   if (match) {
-    res.status(200).send(match);
+    const token = jwt.sign(modifiedUser, secretKey, { expiresIn: "48h" });
+    res.status(200).send({ token, username: user.username });
   } else {
-    res.status(400).send(match);
+    res.status(404).send({ error: "Login unsuccessful" });
   }
 });
 
