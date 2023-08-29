@@ -70,7 +70,7 @@ function LoanReturnModal({
     closeModal();
   };
 
-  const tableHeaderClass = "text-center m-4";
+  const tableHeaderClass = "text-center w-24";
   return (
     <Modal handleModalClose={closeModal}>
       <div className="flex justify-between items-center w-full h-full flex-col">
@@ -81,40 +81,51 @@ function LoanReturnModal({
           </h1>
           <hr
             style={{ borderColor: "#575757" }}
-            className="mb-2 rounded-md h-1 w-full"
+            className="mb-1 rounded-md h-1 w-full"
           />
-          <h3>Key in the number of items returned</h3>
         </div>
-        <table className=" w-full text-center table-fixed border-collapse">
-          <tbody>
-            <tr className="grid-cols-3">
-              <th className={tableHeaderClass}>Name</th>
-              <th className={tableHeaderClass}>Outstanding</th>
-              <th className={tableHeaderClass}>Returned</th>
-            </tr>
-            {/* <ul className="w-full"> */}
+        <div className="flex flex-col">
+          <ul className="w-full text-center font-semibold flex justify-evenly">
+            <li className={tableHeaderClass} style={{ width: "6.5rem" }}>
+              Name
+            </li>
+            <li className={tableHeaderClass} style={{ width: "5.5rem" }}>
+              Outstanding
+            </li>
+            <li className={tableHeaderClass}>Returned</li>
+          </ul>
+          <ul
+            className="flex flex-col overflow-y-scroll"
+            style={{ height: "16rem" }}
+          >
             {request.requestedItems.map((requestedItem, i) => {
               const initialDifference =
                 requestedItem.quantity - requestedItem.returnedQuantity;
               return (
-                <tr className="grid-cols-3" key={requestedItem.id}>
-                  <td className="m-1 text-center w-24">{requestedItem.name}</td>
-                  <td className="mx-2 w-8">{initialDifference}</td>
-                  <td>
-                    <EditingBox
-                      quantity={requestedItem.returnedQuantity}
-                      request={request}
-                      setRequestList={setRequestList}
-                      itemId={requestedItem.id}
-                      targetQuantity="returnedQuantity"
-                    />
-                  </td>
-                </tr>
+                <li className="flex flex-start my-1" key={requestedItem.id}>
+                  <p className="text-center" style={{ width: "6.5rem" }}>
+                    {requestedItem.name}
+                  </p>
+
+                  <p
+                    className="mx-2 flex justify-center items-center"
+                    style={{ width: "4.5rem" }}
+                  >
+                    {initialDifference}
+                  </p>
+
+                  <EditingBox
+                    quantity={requestedItem.returnedQuantity}
+                    request={request}
+                    setRequestList={setRequestList}
+                    itemId={requestedItem.id}
+                    targetQuantity="returnedQuantity"
+                  />
+                </li>
               );
             })}
-            {/* </ul> */}
-          </tbody>
-        </table>
+          </ul>
+        </div>
         <div>
           <div
             className="bg-green-200 rounded-md m-2 p-3"

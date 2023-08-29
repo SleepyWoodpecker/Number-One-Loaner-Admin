@@ -41,7 +41,7 @@ function EditingBox({
 
   return (
     <div className="flex justify-around">
-      <div className="m-1 mx-2 w-6 text-center">
+      <div className="m-1 mx-2 w-6 flex justify-center items-center">
         {isEditing ? (
           <CustomInput input={newQuantity} setInput={setNewQuantity} />
         ) : (
