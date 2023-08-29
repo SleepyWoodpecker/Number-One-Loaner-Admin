@@ -70,7 +70,7 @@ function RequestDetailModal({
   };
   return (
     <Modal handleModalClose={closeModal}>
-      <div className="flex justify-evenly items-center w-full h-5/6 flex-col">
+      <div className="flex justify-between items-center w-full h-5/6 flex-col">
         <div>
           <div className="font-semibold text-lg mb-3 flex justify-between w-40">
             <h2>{request.requester}</h2>
@@ -81,29 +81,31 @@ function RequestDetailModal({
             <h2 className="font-semibold">Return: {request.returnDate}</h2>
           </div>
         </div>
-        <table className="table-fixed">
-          <thead>
-            <tr className="font-semibold text-center">
-              <td>Item</td>
-              <td>Quantity</td>
-            </tr>
-          </thead>
-          <tbody className="grid-cols-2 m-1">
-            {request.requestedItems.map((item) => {
-              return (
-                <tr
-                  className="grid-cols-2 text-center text-center"
-                  key={item.id}
-                >
-                  <td className="w-32">{item.name}</td>
-                  <td className="w-24">{item.quantity}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="overflow-y-scroll" style={{ height: "16rem" }}>
+          <table className="table-fixed">
+            <thead>
+              <tr className="font-semibold text-center">
+                <td>Item</td>
+                <td>Quantity</td>
+              </tr>
+            </thead>
+            <tbody className="grid-cols-2 m-1 ">
+              {request.requestedItems.map((item) => {
+                return (
+                  <tr
+                    className="grid-cols-2 text-center text-center"
+                    key={item.id}
+                  >
+                    <td className="w-32">{item.name}</td>
+                    <td className="w-24">{item.quantity}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div className="flex justify-evenly">
+      <div className="flex justify-evenly mt-8">
         <button
           className={`${generalButton} bg-red-200`}
           onClick={() => processReq("Rejected")}

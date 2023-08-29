@@ -53,8 +53,8 @@ function LoanReturnModal({
       ...updatedRequest,
       prevReq: prevReq.current,
     });
-    setStoreItems((storeItems) =>
-      storeItems.map((storeItem) => {
+    setStoreItems((storeItems) => {
+      const mainStoreList = storeItems.items.map((storeItem) => {
         const listLocation = updatedStoreItems.findIndex(
           (responseItem) => storeItem.id === responseItem.id
         );
@@ -64,8 +64,9 @@ function LoanReturnModal({
         } else {
           return storeItem;
         }
-      })
-    );
+      });
+      return { ...storeItems, items: mainStoreList };
+    });
     closeModal();
   };
 

@@ -151,7 +151,30 @@ storeRouter.put("/post-return/upstock", async (req, res) => {
     Store.findById(requestedItem.id)
   );
   const storeItemData = await Promise.all(storeItems);
+  // track all sized items
+  const consolidatedSizedItems = [];
+
+  // adjust the quantity of returned items to take into account that the return will be split up into multiple sections
   const updatedItems = requestedItems.map((requestedItem, i) => {
+    const consolidatedItemId = requestedItem.consolidatedItemId;
+    if (consolidatedItemId) {
+      const index = consolidatedSizedItems.findIndex(
+        (sizedItem) => sizedItem.consolidatedItemId === consolidatedItemId
+      );
+      if (index !== -1) {
+        consolidatedSizedItems[index].returnedQuantity +=
+          requestedItem.returnedQuantity;
+        consolidatedSizedItems[index].prevReqReturnQuantity +=
+          prevReq.requestedItems[i].returnedQuantity;
+      } else {
+        consolidatedSizedItems.push({
+          consolidatedItemId,
+          returnedQuantity: requestedItem.returnedQuantity,
+          prevReqReturnQuantity: prevReq.requestedItems[i].returnedQuantity,
+        });
+      }
+    }
+
     return Store.findByIdAndUpdate(
       requestedItem.id,
       {
@@ -163,7 +186,28 @@ storeRouter.put("/post-return/upstock", async (req, res) => {
       { new: true }
     );
   });
-  const newStoreList = await Promise.all(updatedItems);
+  const sizedItemsStoreListReq = consolidatedSizedItems.map((sizedItem) =>
+    Store.findById(sizedItem.consolidatedItemId)
+  );
+  const sizedItemData = await Promise.all(sizedItemsStoreListReq);
+  const sizedItemsUpdateReq = consolidatedSizedItems.map((sizedItem, i) =>
+    Store.findByIdAndUpdate(
+      sizedItem.consolidatedItemId,
+      {
+        quantity:
+          sizedItemData[i].quantity +
+          sizedItem.returnedQuantity -
+          sizedItem.prevReqReturnQuantity,
+      },
+      { new: true }
+    )
+  );
+
+  const newStoreList = await Promise.all([
+    ...updatedItems,
+    ...sizedItemsUpdateReq,
+  ]);
+  console.log(newStoreList);
   res.status(200).json(newStoreList);
 });
 
