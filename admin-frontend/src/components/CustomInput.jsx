@@ -33,7 +33,7 @@ function CustomInput({
         value={input}
         onChange={handleInputChange}
         type={inputType}
-        className="focus-visible:outline-orange-500 border-2 px-1.5 py-0.5 justify-self-end rounded-md w-8 text-center"
+        className="focus-visible:outline-orange-500 border-2 px-1 py-0.5 justify-self-end rounded-md w-10 text-center"
         autoFocus
       ></input>
     </div>

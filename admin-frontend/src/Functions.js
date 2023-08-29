@@ -1,3 +1,10 @@
+import MessageBox from "./components/MessageBox";
+
+function showFeedbackMessage(message, color, setStateMessage, timeout) {
+  setStateMessage(<MessageBox color={color}>{message}</MessageBox>);
+  return setTimeout(() => setStateMessage(""), timeout);
+}
+
 function convertStringToDate(dateString) {
   const dateArray = dateString.split("-");
   // since the months are zero indexed, take the month -1
@@ -11,4 +18,9 @@ function compareDates(a, b) {
   return convertStringToDate(a) - convertStringToDate(b);
 }
 
-export { compareDates };
+function validateQuantity(number) {
+  const numberRegex = /^\d+$/;
+  return numberRegex.test(number);
+}
+
+export { compareDates, validateQuantity, showFeedbackMessage };

@@ -17,6 +17,7 @@ function App() {
   const [returnAppointments, setReturnAppointments] = useState(null);
   const [completeReturns, setCompleteReturns] = useState(null);
   const [storeItems, setStoreItems] = useState([]);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const storeItems = async () => {
@@ -72,10 +73,12 @@ function App() {
         setReturnAppointments,
         completeReturns,
         setCompleteReturns,
+        setMessage,
       }}
     >
       <div className="p-4 pt-7 mb-6 mt-8" style={{ height: "92vh" }}>
         <TopBar />
+        {message}
         {displayedPage}
         <div
           className="bg-orange-200 fixed bottom-0 left-0 right-0 p-2"
@@ -106,7 +109,9 @@ function App() {
           </ul>
         </div>
         {/* dummy component to load the yellow coloring into tailwind */}
-        <div className="h-0 w-0 bg-yellow-200"></div>
+        <div className="h-0 w-0 bg-yellow-100"></div>
+        <div className="h-0 w-0 bg-green-100"></div>
+        <div className="h-0 w-0 bg-red-100"></div>
       </div>
     </RequestContext.Provider>
   );

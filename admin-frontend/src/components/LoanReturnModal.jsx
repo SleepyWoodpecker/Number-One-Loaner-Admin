@@ -85,11 +85,11 @@ function LoanReturnModal({
           />
         </div>
         <div className="flex flex-col">
-          <ul className="w-full text-center font-semibold flex justify-evenly">
+          <ul className="w-full text-center font-semibold flex justify-evenly mb-1">
             <li className={tableHeaderClass} style={{ width: "6.5rem" }}>
               Name
             </li>
-            <li className={tableHeaderClass} style={{ width: "5.5rem" }}>
+            <li className={tableHeaderClass} style={{ width: "6rem" }}>
               Outstanding
             </li>
             <li className={tableHeaderClass}>Returned</li>
@@ -98,7 +98,7 @@ function LoanReturnModal({
             className="flex flex-col overflow-y-scroll"
             style={{ height: "16rem" }}
           >
-            {request.requestedItems.map((requestedItem, i) => {
+            {request.requestedItems.map((requestedItem) => {
               const initialDifference =
                 requestedItem.quantity - requestedItem.returnedQuantity;
               return (
@@ -118,7 +118,7 @@ function LoanReturnModal({
                     quantity={requestedItem.returnedQuantity}
                     request={request}
                     setRequestList={setRequestList}
-                    itemId={requestedItem.id}
+                    item={requestedItem}
                     targetQuantity="returnedQuantity"
                   />
                 </li>
