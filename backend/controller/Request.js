@@ -69,4 +69,10 @@ requestRouter.put("/:id", async (req, res) => {
   res.status(200).send(savedRequest);
 });
 
+requestRouter.delete("/:id", async (req, res) => {
+  const deletedRequest = await Request.findByIdAndDelete(req.params.id);
+  console.log(deletedRequest);
+  res.status(200).send(deletedRequest);
+});
+
 module.exports = requestRouter;

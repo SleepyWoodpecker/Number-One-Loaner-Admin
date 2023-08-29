@@ -67,6 +67,13 @@ const updateStoreItemsPostReturn = async (request) => {
   return updatedStoreItems;
 };
 
+const deleteRequest = async (requestId) => {
+  const { data: deletedRequest } = await axios.delete(
+    `${requestBaseUrl}/${requestId}`
+  );
+  return deletedRequest;
+};
+
 export {
   getStoreItems,
   getRequests,
@@ -76,4 +83,5 @@ export {
   updateStoreItemsPostRequest,
   updateStoreItemsPostSizing,
   updateStoreItemsPostReturn,
+  deleteRequest,
 };

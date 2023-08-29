@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import RequestDetailModal from "./RequestDetailModal";
 import LoanProcessModal from "./LoanProcessModal";
 import LoanReturnModal from "./LoanReturnModal";
+import CompleteOrderModal from "./CompleteOrderModal";
 
 function RecordItem({
   request,
@@ -72,6 +73,14 @@ function RecordItem({
         storeItems={storeItems}
         setStoreItems={setStoreItems}
         setRequestStatus={setRequestStatus}
+      />
+    );
+  } else if (type === "Return Archive") {
+    modal = (
+      <CompleteOrderModal
+        request={request}
+        setRequestList={setRequestList}
+        closeModal={closeModal}
       />
     );
   }
