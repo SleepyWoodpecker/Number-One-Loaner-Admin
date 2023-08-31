@@ -1,13 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import CustomInput from "../components/CustomInput";
 import { loginUser } from "../services";
-import { showFeedbackMessage } from "../Functions";
+import { checkUserLogin, showFeedbackMessage } from "../Functions";
 import { RequestContext } from "../App";
 
 function UserAuthPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
   const { setMessage } = useContext(RequestContext);
+
+  // check if the user is already logged in by checking his local storage. Else, prompt him to log in
+  useEffect(() => {
+    setUser(checkUserLogin());
+  }, []);
 
   const handleUserLogin = async () => {
     const user = await loginUser(username, password);
@@ -20,10 +26,22 @@ function UserAuthPage() {
     // else save the user to local storage
     showFeedbackMessage(`Login successful`, "green", setMessage, 3500);
     localStorage.setItem("userData", JSON.stringify(user));
+    setUser(user);
   };
 
-  return (
-    <form className="w-full">
+  return user ? (
+    // need to improve on this CSS later
+    <div className="flex flex-col justify-center items-center">
+      <h2 className="text-xl font-semibold mt-16 text-center">
+        Logged in as {user.username}
+      </h2>
+      <p className="mt-10 flex justify-center w-48 items-center text-center">
+        You now have the rights to delete completed requests and adjust the
+        quantity of store items
+      </p>
+    </div>
+  ) : (
+    <form className="w-full" onSubmit={handleUserLogin}>
       <div className="m-10"></div>
       <CustomInput
         desiredValue={"Username"}

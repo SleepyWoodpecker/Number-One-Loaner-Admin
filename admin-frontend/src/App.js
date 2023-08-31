@@ -81,14 +81,18 @@ function App() {
         completeReturns,
         setCompleteReturns,
         setMessage,
+        handleAuthClick,
       }}
     >
-      <div className="p-4 pt-7 mb-6 mt-8" style={{ height: "92vh" }}>
+      <div
+        className="p-4 pt-7 mb-6 mt-8  mid-point-2:max-w-md mid-point-2:mx-auto"
+        style={{ height: "92vh" }}
+      >
         <TopBar />
         {message}
         {displayedPage}
         <div
-          className="bg-orange-200 fixed bottom-0 left-0 right-0 p-2"
+          className="bg-orange-200 fixed bottom-0 left-0 right-0 pb-2 h-12 "
           style={{
             boxShadow:
               "0 -4px 6px -1px rgb(0 0 0 / 0.1), 0 -2px 4px -2px rgb(0 0 0 / 0.1)",
@@ -128,6 +132,9 @@ function App() {
         <div className="h-0 w-0 bg-yellow-100"></div>
         <div className="h-0 w-0 bg-green-100"></div>
         <div className="h-0 w-0 bg-red-100"></div>
+        <div className="h-0 w-0 bg-yellow-200"></div>
+        <div className="h-0 w-0 bg-green-200"></div>
+        <div className="h-0 w-0 bg-red-200"></div>
       </div>
     </RequestContext.Provider>
   );

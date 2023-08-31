@@ -68,11 +68,22 @@ const updateStoreItemsPostReturn = async (request) => {
   return updatedStoreItems;
 };
 
-const deleteRequest = async (requestId) => {
-  const { data: deletedRequest } = await axios.delete(
-    `${requestBaseUrl}/${requestId}`
-  );
-  return deletedRequest;
+const deleteRequest = async (requestId, userData) => {
+  if (!userData) {
+    return { error: "Not logged in" };
+  }
+  try {
+    const { data: deletedRequest } = await axios.delete(
+      `${requestBaseUrl}/${requestId}`,
+      { headers: { Authorization: `bearer ${userData.token}` } }
+    );
+    return deletedRequest;
+  } catch (err) {
+    // the other error should be that token is expired
+    if (err.response.data.error === "TokenExpiredError") {
+      return { error: "Please log in again" };
+    }
+  }
 };
 
 const loginUser = async (username, password) => {

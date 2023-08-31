@@ -120,6 +120,7 @@ function LoanReturnModal({
                     setRequestList={setRequestList}
                     item={requestedItem}
                     targetQuantity="returnedQuantity"
+                    isReturnBox
                   />
                 </li>
               );

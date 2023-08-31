@@ -25,11 +25,12 @@ const verifyUser = (req, res, next) => {
   try {
     const userVerification = jwt.verify(authorizationHeader, secretKey);
     if (userVerification) {
+      console.log("User has been verified and operation can be carried out");
       return next();
     }
   } catch (err) {
     // possible error names are: TokenExpiredError, JsonWebTokenError
-    res.status(404).send({ error: err.name });
+    res.status(401).send({ error: err.name });
   }
 };
 

@@ -11,6 +11,7 @@ function EditingBox({
   setRequestList,
   item,
   targetQuantity,
+  isReturnBox = false,
 }) {
   const originalQuantity = useRef(quantity);
   const [isEditing, setIsEditing] = useState(false);
@@ -49,7 +50,7 @@ function EditingBox({
     if (quantity === "") {
       setNewQuantity(originalQuantity.current);
       return false;
-    } else if (newQuantity > item.quantity) {
+    } else if (newQuantity > item.quantity && isReturnBox) {
       setNewQuantity(originalQuantity.current);
       showFeedbackMessage(
         `Returned quantity of ${item.name} cannot be more than loaned quantity`,

@@ -3,7 +3,6 @@ const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { secretKey } = require("../utils/config");
-const { verifyUser } = require("../utils/middleware");
 
 // add a new user
 userRouter.post("/", async (req, res) => {
@@ -11,14 +10,16 @@ userRouter.post("/", async (req, res) => {
   const { username, password } = req.body;
   bcrypt.hash(password, saltRounds, async function (err, hash) {
     // Store hash in your password DB.
+    if (err) {
+      res.status(400).send("Error encountered when adding new user");
+    }
     const newUser = new User({
       username,
       hashedPassword: hash,
     });
     const newUserEntry = await newUser.save();
-    res.status(201).send(newUserEntry);
+    return res.status(201).send(newUserEntry);
   });
-  res.status(400).send("Error encountered when adding new user");
 });
 
 userRouter.post("/login", async (req, res) => {

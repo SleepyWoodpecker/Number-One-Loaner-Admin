@@ -24,7 +24,6 @@ function RequestDetailModal({
       ...request,
       status,
     });
-    console.log(newRequest);
     setRequestStatus(status);
     // remove the approved request from the list
     setRequestList((requestList) => {

@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import Modal from "./Modal";
 import { deleteRequest } from "../services";
+import { checkUserLogin, showFeedbackMessage } from "../Functions";
+import { RequestContext } from "../App";
 
 function CompleteOrderModal({ request, setRequestList, closeModal }) {
+  const { setMessage, handleAuthClick } = useContext(RequestContext);
+  const user = checkUserLogin();
   const handleRecordDeletion = async () => {
-    const deletedRequest = await deleteRequest(request.id);
+    const deletedRequest = await deleteRequest(request.id, user);
+    if (deletedRequest.error) {
+      closeModal();
+      showFeedbackMessage(deletedRequest.error, "red", setMessage, 5000);
+      if (deletedRequest.error === "Please log in again") {
+        localStorage.clear();
+      }
+      // redirect to login page
+      return handleAuthClick();
+    }
     setRequestList((requestList) =>
       requestList.filter((request) => request.id !== deletedRequest.id)
     );
@@ -22,7 +35,7 @@ function CompleteOrderModal({ request, setRequestList, closeModal }) {
             <li className="w-32">Item</li>
             <li className="w-32">Quantity</li>
           </ul>
-          <ul className="overflow-y-scroll" style={{ height: "16rem" }}>
+          <ul className="overflow-y-scroll" style={{ height: "18rem" }}>
             {request.requestedItems.map((item) => {
               return (
                 <li
@@ -37,10 +50,9 @@ function CompleteOrderModal({ request, setRequestList, closeModal }) {
           </ul>
         </div>
         <div
-          className="rounded-md shadow-sm w-40 p-1 bg-red-200 text-center"
+          className="rounded-md shadow-sm w-40 p-1 bg-red-200 text-center mt-7"
           onClick={handleRecordDeletion}
         >
-          {/* need to remember to handle error for expired web token */}
           Clear Record
         </div>
       </div>

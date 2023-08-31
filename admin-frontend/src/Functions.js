@@ -23,4 +23,10 @@ function validateQuantity(number) {
   return numberRegex.test(number);
 }
 
-export { compareDates, validateQuantity, showFeedbackMessage };
+function checkUserLogin() {
+  const user = JSON.parse(localStorage.getItem("userData"));
+  // if userData is available, return object with token and username. Else return null
+  return user;
+}
+
+export { compareDates, validateQuantity, showFeedbackMessage, checkUserLogin };
