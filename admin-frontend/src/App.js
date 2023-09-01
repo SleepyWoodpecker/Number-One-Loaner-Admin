@@ -7,6 +7,7 @@ import { PiWarehouseDuotone } from "react-icons/pi";
 import { compareDates } from "./Functions";
 import TopBar from "./components/TopBar";
 import UserAuthPage from "./pages/UserAuthPage";
+import AddStoreItemPage from "./pages/AddStoreItem";
 
 // I am gonig to define the NAV BAR here
 const RequestContext = createContext(null);
@@ -43,20 +44,7 @@ function App() {
     storeItems();
   }, []);
 
-  let displayedPage;
-
-  if (activePage === "Requests") {
-    displayedPage = (
-      <RequestsPage storeItems={storeItems} setStoreItems={setStoreItems} />
-    );
-  } else if (activePage === "Store Items") {
-    displayedPage = (
-      <StoreItemsPage storeItems={storeItems} setStoreItems={setStoreItems} />
-    );
-  } else if (activePage === "Auth") {
-    displayedPage = <UserAuthPage />;
-  }
-
+  // remove all this
   const handleRequestsClick = () => {
     setActivePage("Requests");
   };
@@ -68,6 +56,36 @@ function App() {
   const handleAuthClick = () => {
     setActivePage("Auth");
   };
+
+  // compile everything into this when refactoring
+  const changeActivePage = (pageName) => {
+    setActivePage(pageName);
+  };
+
+  let displayedPage;
+
+  switch (activePage) {
+    case "Requests":
+      displayedPage = (
+        <RequestsPage storeItems={storeItems} setStoreItems={setStoreItems} />
+      );
+      break;
+    case "Store Items":
+      displayedPage = (
+        <StoreItemsPage storeItems={storeItems} setStoreItems={setStoreItems} />
+      );
+      break;
+    case "Auth":
+      displayedPage = <UserAuthPage changeActivePage={changeActivePage} />;
+      break;
+    case "Add Store":
+      displayedPage = <AddStoreItemPage changeActivePage={changeActivePage} />;
+      break;
+    default:
+      displayedPage = (
+        <StoreItemsPage storeItems={storeItems} setStoreItems={setStoreItems} />
+      );
+  }
 
   return (
     <RequestContext.Provider

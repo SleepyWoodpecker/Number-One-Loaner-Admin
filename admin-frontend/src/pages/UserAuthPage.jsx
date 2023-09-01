@@ -4,7 +4,7 @@ import { loginUser } from "../services";
 import { checkUserLogin, showFeedbackMessage } from "../Functions";
 import { RequestContext } from "../App";
 
-function UserAuthPage() {
+function UserAuthPage({ changeActivePage }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -31,14 +31,22 @@ function UserAuthPage() {
 
   return user ? (
     // need to improve on this CSS later
-    <div className="flex flex-col justify-center items-center">
-      <h2 className="text-xl font-semibold mt-16 text-center">
+    <div className="flex flex-col justify-evenly items-center">
+      <h2 className="text-xl font-semibold mt-5 text-center">
         Logged in as {user.username}
       </h2>
-      <p className="mt-10 flex justify-center w-48 items-center text-center">
+      <p className="mt-3 flex justify-center w-48 items-center text-center">
         You now have the rights to delete completed requests and adjust the
         quantity of store items
       </p>
+      <div className="flex flex-col justify-center items-center mt-8">
+        <div
+          className="w-60 bg-orange-200 rounded-md p-1 text-center"
+          onClick={() => changeActivePage("Add Store")}
+        >
+          Add Items To Store
+        </div>
+      </div>
     </div>
   ) : (
     <form className="w-full" onSubmit={handleUserLogin}>

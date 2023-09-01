@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bubble-triangle-outline {
+  opacity: 80%;
+  position: absolute;
+  top: -6px;
+  left: 3px;
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 9px solid #adb0b4;
+}
+
+.bubble-triangle-inside {
+  position: absolute;
+  top: -7px;
+  left: 4px;
+  width: 0;
+  height: 0;
+  border-left: 6.5px solid transparent;
+  border-right: 6.5px solid transparent;
+  border-top: 8.5px solid white;
+}
+
+.text-bubble {
+  background-color: white;
+  position: absolute;
+  padding: 2px;
+  border: 1px solid #adb0b4;
+  top: -85px;
+  left: 1px;
+  height: 5rem;
+  width: 13rem;
+  color: #5c5d5e;
+}

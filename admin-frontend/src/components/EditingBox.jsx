@@ -46,6 +46,8 @@ function EditingBox({
     setIsEditing(false);
   };
 
+  const handleQuantityInput = (e) => setNewQuantity(e.target.value);
+
   const verifyQuantity = (quantity) => {
     if (quantity === "") {
       setNewQuantity(originalQuantity.current);
@@ -71,7 +73,7 @@ function EditingBox({
         {isEditing ? (
           <CustomInput
             input={newQuantity}
-            setInput={setNewQuantity}
+            handleInputChange={handleQuantityInput}
             width={10}
           />
         ) : (
