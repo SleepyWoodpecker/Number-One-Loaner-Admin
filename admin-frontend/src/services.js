@@ -98,6 +98,16 @@ const loginUser = async (username, password) => {
   }
 };
 
+// still incomplete
+const addNewStoreItem = async (imageData) => {
+  const formData = new FormData();
+  formData.append("image", imageData.image);
+  console.log(process.env.REACT_APP_IMGBB_API_KEY);
+  formData.append("key", process.env.REACT_APP_IMGBB_API_KEY);
+  const response = axios.post(`https://api.imgbb.com/1/upload`, formData);
+  return response.data;
+};
+
 export {
   getStoreItems,
   getRequests,
@@ -109,4 +119,5 @@ export {
   updateStoreItemsPostReturn,
   deleteRequest,
   loginUser,
+  addNewStoreItem,
 };

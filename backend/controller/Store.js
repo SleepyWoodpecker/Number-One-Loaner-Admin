@@ -1,5 +1,7 @@
 const storeRouter = require("express").Router();
 const Store = require("../models/StoreModel");
+const { imgbbApiKey } = require("../utils/config");
+const axios = require("axios");
 
 // all routes to the store DB must start with /store/...
 
@@ -217,5 +219,14 @@ storeRouter.post("/", async (req, res) => {
   const entryResult = await newEntry.save();
   res.status(201).json(entryResult);
 });
+
+// add a new item through the app
+// storeRouter.post("/newItem", async (req, res) => {
+//   const { data: imageData } = await axios.post(
+//     "https://api.imgbb.com/1/upload",
+//     req.body
+//   );
+//   res.status(201).json(imageData);
+// });
 
 module.exports = storeRouter;

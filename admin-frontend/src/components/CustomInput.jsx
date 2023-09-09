@@ -12,7 +12,7 @@ function CustomInput({
   isPassword = false,
   isForm = false,
   formInformation = "",
-  autoFocus = "off",
+  autoFocus = false,
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showExtraInformation, setShowExtraInformation] = useState(false);
