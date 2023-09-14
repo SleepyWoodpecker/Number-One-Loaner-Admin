@@ -220,13 +220,4 @@ storeRouter.post("/", async (req, res) => {
   res.status(201).json(entryResult);
 });
 
-// add a new item through the app
-// storeRouter.post("/newItem", async (req, res) => {
-//   const { data: imageData } = await axios.post(
-//     "https://api.imgbb.com/1/upload",
-//     req.body
-//   );
-//   res.status(201).json(imageData);
-// });
-
 module.exports = storeRouter;

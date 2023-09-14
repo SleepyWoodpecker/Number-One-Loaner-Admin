@@ -36,7 +36,14 @@ function ItemTable({ storeItems }) {
 
             return (
               <tr key={storeItem.id}>
-                <td className={tableBorder}>{storeItem.name}</td>
+                <td className={`${tableBorder} text-center`}>
+                  <p
+                    className="border-0 w-full"
+                    style={{ overflowWrap: "break-word" }}
+                  >
+                    {storeItem.name}
+                  </p>
+                </td>
                 <td className={tableBorder}>{storeItem.quantity}</td>
                 <td className={`${tableBorder}`}>
                   <div className={`bg-${tableColoring}-200 rounded-md p-1 m-2`}>

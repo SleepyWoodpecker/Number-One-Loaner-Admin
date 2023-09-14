@@ -1,4 +1,5 @@
 import axios from "axios";
+import { validateQuantity } from "./Functions";
 const storeBaseUrl = "/api/store";
 const requestBaseUrl = "/api/request";
 const userBaseUrl = "/api/user/login";
@@ -102,10 +103,51 @@ const loginUser = async (username, password) => {
 const addNewStoreItem = async (imageData) => {
   const formData = new FormData();
   formData.append("image", imageData.image);
-  console.log(process.env.REACT_APP_IMGBB_API_KEY);
   formData.append("key", process.env.REACT_APP_IMGBB_API_KEY);
-  const response = axios.post(`https://api.imgbb.com/1/upload`, formData);
-  return response.data;
+  formData.append("name", imageData.itemName);
+  const imageUpload = await axios.post(
+    `https://api.imgbb.com/1/upload`,
+    formData
+  );
+  console.log(imageUpload);
+  const imgUrl = imageUpload.data.data.display_url;
+  const initialQuantity =
+    imageData.hasSize === "Yes"
+      ? imageData.sizes.reduce((acc, size) => acc + Number(size.quantity), 0)
+      : imageData.itemQuantity;
+  const mainItemData = {
+    name: imageData.itemName,
+    quantity: initialQuantity,
+    imgUrl,
+    originalQuantity: initialQuantity,
+    sizes: imageData.sizes.map((item) => item.size),
+  };
+
+  const { data: uploadedMainItemData } = await axios.post(
+    storeBaseUrl,
+    mainItemData
+  );
+  let variationRequest;
+  if (imageData.hasSize === "Yes") {
+    // if there are sizes, add a new entry in the DB for each size
+    variationRequest = imageData.sizes.map((variation) => {
+      const data = {
+        name: `${imageData.itemName} - (${
+          validateQuantity(variation.size) ? `Size` : ""
+        } ${variation.size})`,
+        quantity: variation.quantity,
+        originalQuantity: variation.quantity,
+        imgUrl,
+        consolidatedItemId: uploadedMainItemData.id,
+      };
+      return axios.post(storeBaseUrl, data);
+    });
+
+    const [item1, item2] = await Promise.all(variationRequest);
+    console.log(item1, item2);
+  }
+
+  return uploadedMainItemData;
 };
 
 export {

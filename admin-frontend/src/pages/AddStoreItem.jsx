@@ -1,27 +1,31 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import CustomInput from "../components/CustomInput";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { RiImageAddLine } from "react-icons/ri";
 import { addNewStoreItem } from "../services";
+import DropdownMenu from "../components/DropdownMenu";
+import ListSizeMenu from "../components/ListSizeMenu";
+import { checkEmptyObject, showFeedbackMessage } from "../Functions";
+import { RequestContext } from "../App";
 
 function AddStoreItemPage({ changeActivePage }) {
+  const { setMessage } = useContext(RequestContext);
   // need perform user verification first
   const [storeItemInformation, setStoreItemInformation] = useState({
     itemName: "",
     itemQuantity: "",
-    sizes: "",
+    hasSize: false,
+    sizes: [],
     image: null,
     preview: null,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const uploadFile = () => {
     document.querySelector("#storeItemImage").click();
   };
   const handleStoreItemInput = (e, field) => {
     let input = e.target.value;
-    if (field === "itemQuantity") {
-      input = Number(input);
-    }
     setStoreItemInformation((storeItemInformation) => ({
       ...storeItemInformation,
       [field]: input,
@@ -39,12 +43,51 @@ function AddStoreItemPage({ changeActivePage }) {
   };
 
   const handleSubmit = async () => {
+    if (!checkEmptyObject(storeItemInformation)) {
+      showFeedbackMessage(`All fields must be filled`, "red", setMessage, 4000);
+      return;
+    }
+    setIsSubmitting(true);
     const newItem = await addNewStoreItem(storeItemInformation);
     console.log(newItem);
+    showFeedbackMessage(
+      `${newItem.name} added to the store list`,
+      "green",
+      setMessage,
+      3500
+    );
+    setStoreItemInformation({
+      itemName: "",
+      itemQuantity: "",
+      hasSize: false,
+      sizes: [],
+      image: null,
+      preview: null,
+    });
+    setIsSubmitting(false);
   };
-  // must remember to take into account that the values can be separated by ", " as well
-  const sizeInformation = `Enter the sizes or varitions available as comma separated values e.g. 5,6,7,8,9`;
-  console.log(storeItemInformation);
+  const formMargin = "mt-2";
+  const sizeInformationOptions = ["Yes", "No"];
+
+  let conditionalField = "";
+  if (storeItemInformation.hasSize === "Yes") {
+    conditionalField = (
+      <ListSizeMenu
+        data={storeItemInformation.sizes}
+        setData={setStoreItemInformation}
+      />
+    );
+  } else if (storeItemInformation.hasSize === "No") {
+    conditionalField = (
+      <CustomInput
+        desiredValue="Quantity"
+        input={storeItemInformation.itemQuantity}
+        width="full"
+        handleInputChange={(e) => handleStoreItemInput(e, "itemQuantity")}
+        isForm
+      />
+    );
+  }
   return (
     <>
       <IoIosArrowRoundBack
@@ -53,8 +96,11 @@ function AddStoreItemPage({ changeActivePage }) {
         className="absolute top-13"
         onClick={() => changeActivePage("Auth")}
       />
-      <h2 className="text-xl font-bold text-center mb-5">Add Item To Store</h2>
-      <form className="flex flex-col justify-evenly h-4/6">
+      <h2 className="text-xl font-bold text-center mb-3">Add Item To Store</h2>
+      <form
+        className="flex flex-col overflow-y-scroll"
+        style={{ height: "90%" }}
+      >
         {/* this then has to make an api call to imgbb on success, to upload the image */}
         <div>
           <label htmlFor="image">Image</label>
@@ -78,7 +124,6 @@ function AddStoreItemPage({ changeActivePage }) {
             </p>
           </div>
         </div>
-        {/* accept field causes it to only acccept images */}
         <input
           type="file"
           id="storeItemImage"
@@ -87,35 +132,39 @@ function AddStoreItemPage({ changeActivePage }) {
           onChange={handleImageUpload}
           autoFocus="on"
         />
-        <CustomInput
-          desiredValue="Name"
-          input={storeItemInformation.itemName}
-          width="full"
-          handleInputChange={(e) => handleStoreItemInput(e, "itemName")}
-          isForm
-        />
-        <CustomInput
-          desiredValue="Quantity"
-          input={storeItemInformation.itemQuantity}
-          width="full"
-          handleInputChange={(e) => handleStoreItemInput(e, "itemQuantity")}
-          isForm
-        />
-        {/* this one probably needs a button to explain how it works, but it should be a CSV of the sizes */}
-        <CustomInput
-          desiredValue="Sizes / Variations"
-          input={storeItemInformation.sizes}
-          width="full"
-          handleInputChange={(e) => handleStoreItemInput(e, "sizes")}
-          formInformation={sizeInformation}
-          isForm
-        />
+        <div className={`${formMargin}`}>
+          <CustomInput
+            desiredValue="Name"
+            input={storeItemInformation.itemName}
+            width="full"
+            handleInputChange={(e) => handleStoreItemInput(e, "itemName")}
+            isForm
+          />
+        </div>
+        <div className={`${formMargin}`}>
+          <DropdownMenu
+            input={storeItemInformation.hasSize}
+            desiredValue="Sizes / Variations"
+            handleInputChange={(e) => handleStoreItemInput(e, "hasSize")}
+            options={sizeInformationOptions}
+          />
+        </div>
+        {/* if there are sizes, add the boxes that allow you to input them */}
+        <div className={`mt-2`}>{conditionalField}</div>
         <div className="flex justify-center items-center">
           <div
-            className="rounded-md bg-orange-200 p-3 mt-12 w-48 text-center"
+            className="rounded-md bg-orange-200 px-3 py-2 mt-6 w-full text-center h-10"
             onClick={handleSubmit}
           >
-            Add item
+            {isSubmitting ? (
+              <img
+                src={require("../Images/Loading.gif")}
+                alt="loading animation"
+                className="mx-auto h-full"
+              />
+            ) : (
+              <p className="text-lg">Add item</p>
+            )}
           </div>
         </div>
       </form>

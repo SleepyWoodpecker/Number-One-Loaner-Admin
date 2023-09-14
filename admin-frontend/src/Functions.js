@@ -29,4 +29,20 @@ function checkUserLogin() {
   return user;
 }
 
-export { compareDates, validateQuantity, showFeedbackMessage, checkUserLogin };
+function checkEmptyObject(obj) {
+  for (const [key, value] of Object.entries(obj)) {
+    if (!key || !value) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export {
+  compareDates,
+  validateQuantity,
+  showFeedbackMessage,
+  checkUserLogin,
+  checkEmptyObject,
+};

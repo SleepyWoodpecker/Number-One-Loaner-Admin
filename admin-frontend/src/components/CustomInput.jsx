@@ -3,6 +3,7 @@ import ExtraInformationButton from "./ExtraInformationButton";
 
 function CustomInput({
   desiredValue,
+  divAlignment = "start",
   input,
   width,
   handleInputChange,
@@ -63,7 +64,7 @@ function CustomInput({
   };
 
   return (
-    <div className="flex flex-col items-start w-full">
+    <div className={`flex flex-col items-${divAlignment} w-full`}>
       <div className="flex justify-between">
         {desiredValue && (
           <label
