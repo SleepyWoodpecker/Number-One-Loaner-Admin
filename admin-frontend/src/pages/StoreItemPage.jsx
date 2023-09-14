@@ -19,6 +19,10 @@ function StoreItemPage() {
     loadVariations();
   }, [storeItemId]);
 
+  const setMainItemQuantity = (id, newQuantity) => {
+    setMainItem((mainItem) => ({ ...mainItem, quantity: newQuantity }));
+  };
+
   return mainItem ? (
     <div>
       <Link to="/">
@@ -39,7 +43,9 @@ function StoreItemPage() {
         <div className="mt-1">
           <StoreItemVariationDisplay
             mainItem={mainItem}
+            setMainItemQuantity={setMainItemQuantity}
             variations={variations}
+            setVariations={setVariations}
           />
         </div>
       </div>

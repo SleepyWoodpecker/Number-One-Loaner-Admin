@@ -1,6 +1,12 @@
 import React from "react";
+import StoreItemEditingBox from "./StoreItemEditingBox";
 
-function VariationTable({ mainItem, variations, variationOrSizeHeader }) {
+function VariationTable({
+  mainItem,
+  variations,
+  setVariations,
+  variationOrSizeHeader,
+}) {
   const tableBorder = "border border-slate-400";
   return (
     <table className="w-full text-center table-fixed border-collapse border border-slate-500 text-center">
@@ -33,7 +39,9 @@ function VariationTable({ mainItem, variations, variationOrSizeHeader }) {
                   .replace(`${mainItem.name} - (`, "")
                   .replace(")", "")}
               </td>
-              <td className={`${tableBorder}`}>{variation.quantity}</td>
+              <td className={`${tableBorder}`}>
+                <StoreItemEditingBox item={variation} setMainItem />
+              </td>
               <td className={`${tableBorder}`}>
                 <div
                   className={`bg-${cellColoring}-200 rounded-md p-1 mx-5 my-2 flex justify-center`}

@@ -1,9 +1,15 @@
 import React from "react";
 import { validateQuantity } from "../Functions";
 import VariationTable from "./VariationTable";
-import UpcomingReturns from "./UpcomingReturns";
+import AssociatedRequests from "./AssociatedRequests";
+import StoreItemEditingBox from "./StoreItemEditingBox";
 
-function StoreItemVariationDisplay({ mainItem, variations }) {
+function StoreItemVariationDisplay({
+  mainItem,
+  setMainItemQuantity,
+  variations,
+  setVariations,
+}) {
   const stockPercentage = Math.round(
     (mainItem.quantity / mainItem.originalQuantity) * 100
   );
@@ -43,7 +49,12 @@ function StoreItemVariationDisplay({ mainItem, variations }) {
             <td className={`${tableBorder}`}>Percentage</td>
           </tr>
           <tr>
-            <td className={`${tableBorder}`}>{mainItem.quantity}</td>
+            <td className={`${tableBorder}`}>
+              <StoreItemEditingBox
+                item={mainItem}
+                setQuantity={setMainItemQuantity}
+              />
+            </td>
             <td className={`${tableBorder}`}>
               <div
                 className={`bg-${cellColoring}-200 rounded-md p-1 mx-5 my-2 flex justify-center`}
@@ -59,6 +70,7 @@ function StoreItemVariationDisplay({ mainItem, variations }) {
           <VariationTable
             mainItem={mainItem}
             variations={variations}
+            setVariations={setVariations}
             variationOrSizeHeader={variationOrSizeHeader}
           />
         </div>
@@ -67,7 +79,7 @@ function StoreItemVariationDisplay({ mainItem, variations }) {
       )}
 
       <h1 className="mt-4 font-semibold">Requests with {mainItem.name}</h1>
-      <UpcomingReturns
+      <AssociatedRequests
         variationOrSizeHeader={variationOrSizeHeader}
         mainItem={mainItem}
       />

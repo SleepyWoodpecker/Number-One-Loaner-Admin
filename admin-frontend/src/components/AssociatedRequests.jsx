@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { findAllAssociatedRequests } from "../services";
 import RecordGallery from "./RecordGallery";
 
-function UpcomingReturns({ variationOrSizeHeader, mainItem }) {
+function AssociatedRequests({ variationOrSizeHeader, mainItem }) {
   // if the item has variations, should search for the consolidatedItemId. Else search for just its ID
   const [requests, setRequests] = useState(null);
   let hasSize = true;
@@ -27,4 +27,4 @@ function UpcomingReturns({ variationOrSizeHeader, mainItem }) {
   );
 }
 
-export default UpcomingReturns;
+export default AssociatedRequests;

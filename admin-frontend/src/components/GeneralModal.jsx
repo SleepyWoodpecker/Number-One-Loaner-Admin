@@ -4,7 +4,7 @@ import Modal from "./Modal";
 function GeneralModal({ request, closeModal }) {
   return (
     <Modal handleModalClose={closeModal}>
-      <div className="flex justify-between items-center w-full h-5/6 flex-col">
+      <div className="flex justify-between items-center w-full h-full flex-col">
         <div>
           <div className="font-semibold text-lg mb-3 flex justify-between w-40">
             <h2>{request.requester}</h2>

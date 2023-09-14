@@ -87,7 +87,6 @@ function RecordItem({
   } else if (type === "Item Tracking") {
     modal = <GeneralModal request={request} closeModal={closeModal} />;
   }
-  console.log(modal, type);
   return (
     <div>
       <div
