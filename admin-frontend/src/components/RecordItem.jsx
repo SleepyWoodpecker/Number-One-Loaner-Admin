@@ -3,6 +3,7 @@ import RequestDetailModal from "./RequestDetailModal";
 import LoanProcessModal from "./LoanProcessModal";
 import LoanReturnModal from "./LoanReturnModal";
 import CompleteOrderModal from "./CompleteOrderModal";
+import GeneralModal from "./GeneralModal";
 
 function RecordItem({
   request,
@@ -83,24 +84,39 @@ function RecordItem({
         closeModal={closeModal}
       />
     );
+  } else if (type === "Item Tracking") {
+    modal = <GeneralModal request={request} closeModal={closeModal} />;
   }
-
+  console.log(modal, type);
   return (
     <div>
       <div
         className="rounded-md shadow-md py-3 px-1 my-2 flex justify-between border-2 border-gray-100 w-full"
         onClick={openModal}
       >
-        <h2 className="font-semibold mx-2 w-36 overflow-hidden text-sm flex justify-start items-center">
+        <h2
+          className={`font-semibold mx-2 w-24 overflow-hidden text-sm flex justify-${
+            request.requester.length > 14 ? "start" : "center"
+          } my-auto`}
+          style={{ overflowWrap: "break-word" }}
+        >
           {request.requester}
         </h2>
-        <p className="mx-2">
+        <p
+          className={`mr-1 ${
+            type === "Item Tracking" ? "text-sm" : ""
+          } my-auto`}
+          style={{ overflowWrap: "break-word" }}
+        >
           {type === "Return Appointments"
             ? request.returnDate
             : request.sizingDate}
         </p>
         <div
-          className={`bg-${color}-200 w-32 text-center rounded-md flex items-center justify-center text-sm mx-2 px-3`}
+          className={`bg-${color}-200 text-center rounded-md flex items-center justify-center ${
+            type === "Item Tracking" ? "text-xs" : "text-sm"
+          } mx-2 px-3`}
+          style={{ width: "6.5rem" }}
         >
           {requestStatus}
         </div>

@@ -157,6 +157,15 @@ const findAllVariations = async (mainItemId) => {
   return allVariations;
 };
 
+const findAllAssociatedRequests = async (hasSize, mainItemId) => {
+  const { data: associatedRequests } = await axios.get(
+    `${requestBaseUrl}/findAllAssociatedRequests/${
+      hasSize ? "variations" : "main"
+    }/${mainItemId}`
+  );
+  return associatedRequests;
+};
+
 export {
   getStoreItems,
   getRequests,
@@ -170,4 +179,5 @@ export {
   loginUser,
   addNewStoreItem,
   findAllVariations,
+  findAllAssociatedRequests,
 };
