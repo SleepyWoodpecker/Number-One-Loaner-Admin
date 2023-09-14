@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function ItemTable({ storeItems }) {
   const tableBorder = "border border-slate-400";
@@ -37,12 +38,14 @@ function ItemTable({ storeItems }) {
             return (
               <tr key={storeItem.id}>
                 <td className={`${tableBorder} text-center`}>
-                  <p
-                    className="border-0 w-full"
-                    style={{ overflowWrap: "break-word" }}
-                  >
-                    {storeItem.name}
-                  </p>
+                  <Link to={`/store/${storeItem.id}`}>
+                    <p
+                      className="border-0 w-full"
+                      style={{ overflowWrap: "break-word" }}
+                    >
+                      {storeItem.name}
+                    </p>
+                  </Link>
                 </td>
                 <td className={tableBorder}>{storeItem.quantity}</td>
                 <td className={`${tableBorder}`}>

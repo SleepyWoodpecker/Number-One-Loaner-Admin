@@ -1,7 +1,5 @@
 const storeRouter = require("express").Router();
 const Store = require("../models/StoreModel");
-const { imgbbApiKey } = require("../utils/config");
-const axios = require("axios");
 
 // all routes to the store DB must start with /store/...
 
@@ -24,6 +22,15 @@ storeRouter.get("/", async (req, res) => {
 storeRouter.get("/:id", async (req, res) => {
   const storeItem = await Store.findById(req.params.id);
   res.status(200).json(storeItem);
+});
+
+// find store item and its variations / sizes
+storeRouter.get("/findAllVariations/:id", async (req, res) => {
+  const { id } = req.params;
+  const mainItemReq = Store.findById(id);
+  const variationsReq = Store.find({ consolidatedItemId: id });
+  const allItems = await Promise.all([mainItemReq, variationsReq]);
+  res.status(200).send(allItems.flat());
 });
 
 // to update the quantities of the items in the store

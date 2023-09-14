@@ -150,6 +150,13 @@ const addNewStoreItem = async (imageData) => {
   return uploadedMainItemData;
 };
 
+const findAllVariations = async (mainItemId) => {
+  const { data: allVariations } = await axios.get(
+    `${storeBaseUrl}/findAllVariations/${mainItemId}`
+  );
+  return allVariations;
+};
+
 export {
   getStoreItems,
   getRequests,
@@ -162,4 +169,5 @@ export {
   deleteRequest,
   loginUser,
   addNewStoreItem,
+  findAllVariations,
 };
