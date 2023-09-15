@@ -87,6 +87,8 @@ function RecordItem({
   } else if (type === "Item Tracking") {
     modal = <GeneralModal request={request} closeModal={closeModal} />;
   }
+
+  // need to asjust this man looks really off now... esp when the status is longer
   return (
     <div>
       <div

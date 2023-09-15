@@ -1,23 +1,20 @@
 import React, { useContext } from "react";
 import Modal from "./Modal";
-import { deleteRequest } from "../services";
-import { checkUserLogin, showFeedbackMessage } from "../Functions";
+import { deleteRequest, checkUserLogin } from "../services";
+import { showFeedbackMessage } from "../Functions";
 import { RequestContext } from "../App";
 
 function CompleteOrderModal({ request, setRequestList, closeModal }) {
   const { setMessage, handleAuthClick } = useContext(RequestContext);
-  const user = checkUserLogin();
+
   const handleRecordDeletion = async () => {
-    const deletedRequest = await deleteRequest(request.id, user);
-    if (deletedRequest.error) {
+    const user = await checkUserLogin();
+    if (user.error) {
       closeModal();
-      showFeedbackMessage(deletedRequest.error, "red", setMessage, 5000);
-      if (deletedRequest.error === "Please log in again") {
-        localStorage.clear();
-      }
-      // redirect to login page
+      showFeedbackMessage(user.error, "red", setMessage, 5000);
       return handleAuthClick();
     }
+    const deletedRequest = await deleteRequest(request.id, user);
     setRequestList((requestList) =>
       requestList.filter((request) => request.id !== deletedRequest.id)
     );

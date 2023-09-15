@@ -2,7 +2,7 @@ import axios from "axios";
 import { validateQuantity } from "./Functions";
 const storeBaseUrl = "/api/store";
 const requestBaseUrl = "/api/request";
-const userBaseUrl = "/api/user/login";
+const userBaseUrl = "/api/user";
 
 const getStoreItems = async () => {
   const { data: storeItems } = await axios.get(storeBaseUrl);
@@ -70,26 +70,17 @@ const updateStoreItemsPostReturn = async (request) => {
 };
 
 const deleteRequest = async (requestId, userData) => {
-  if (!userData) {
-    return { error: "Not logged in" };
-  }
-  try {
-    const { data: deletedRequest } = await axios.delete(
-      `${requestBaseUrl}/${requestId}`,
-      { headers: { Authorization: `bearer ${userData.token}` } }
-    );
-    return deletedRequest;
-  } catch (err) {
-    // the other error should be that token is expired
-    if (err.response.data.error === "TokenExpiredError") {
-      return { error: "Please log in again" };
-    }
-  }
+  console.log(userData);
+  const { data: deletedRequest } = await axios.delete(
+    `${requestBaseUrl}/${requestId}`,
+    { headers: { Authorization: `bearer ${userData.token}` } }
+  );
+  return deletedRequest;
 };
 
 const loginUser = async (username, password) => {
   try {
-    const { data: encodedUser } = await axios.post(`${userBaseUrl}`, {
+    const { data: encodedUser } = await axios.post(`${userBaseUrl}/login`, {
       username,
       password,
     });
@@ -166,6 +157,12 @@ const findAllAssociatedRequests = async (hasSize, mainItemId) => {
   return associatedRequests;
 };
 
+async function checkUserLogin() {
+  const user = JSON.parse(localStorage.getItem("userData"));
+  const { data: userLogin } = await axios.post(`${userBaseUrl}/verify`, user);
+  return userLogin;
+}
+
 export {
   getStoreItems,
   getRequests,
@@ -180,4 +177,5 @@ export {
   addNewStoreItem,
   findAllVariations,
   findAllAssociatedRequests,
+  checkUserLogin,
 };

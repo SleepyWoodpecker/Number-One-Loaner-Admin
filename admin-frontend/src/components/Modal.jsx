@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { BsX } from "react-icons/bs";
 
 function Modal({ children, handleModalClose }) {
-  const modalStyle = `bg-white border-2 z-20 fixed inset-x-7 inset-y-36 p-2`;
+  const modalStyle = `bg-white border-2 z-30 fixed p-2 inset-x-8 inset-y-20 py-4 mid-point-3:top-28 mid-point-4:top-32 desktop:top-40 max-w-md mx-auto`;
 
   return createPortal(
     <div>

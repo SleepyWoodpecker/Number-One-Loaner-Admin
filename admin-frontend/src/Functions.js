@@ -23,12 +23,6 @@ function validateQuantity(number) {
   return numberRegex.test(number);
 }
 
-function checkUserLogin() {
-  const user = JSON.parse(localStorage.getItem("userData"));
-  // if userData is available, return object with token and username. Else return null
-  return user;
-}
-
 function checkEmptyObject(obj) {
   for (const [key, value] of Object.entries(obj)) {
     if (!key || !value) {
@@ -43,6 +37,5 @@ export {
   compareDates,
   validateQuantity,
   showFeedbackMessage,
-  checkUserLogin,
   checkEmptyObject,
 };
