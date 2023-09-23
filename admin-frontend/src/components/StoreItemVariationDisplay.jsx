@@ -1,15 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { validateQuantity } from "../Functions";
 import VariationTable from "./VariationTable";
 import AssociatedRequests from "./AssociatedRequests";
 import StoreItemEditingBox from "./StoreItemEditingBox";
+import { checkUserLogin } from "../services";
 
 function StoreItemVariationDisplay({
   mainItem,
   setMainItemQuantity,
+  setMainItemOriginalQuantity,
   variations,
-  setVariations,
+  setVariationQuantity,
 }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  useEffect(() => {
+    const checkLogin = async () => {
+      const loginStatus = await checkUserLogin();
+      setIsLoggedIn(loginStatus);
+    };
+    checkLogin();
+  }, []);
   const stockPercentage = Math.round(
     (mainItem.quantity / mainItem.originalQuantity) * 100
   );
@@ -24,15 +34,16 @@ function StoreItemVariationDisplay({
     cellColoring = "red";
   }
 
+  const hasSize = mainItem.sizes.length > 0;
+
   let variationOrSizeHeader = "";
-  if (mainItem.sizes.length > 0) {
+  if (hasSize) {
     if (validateQuantity(mainItem.sizes[0])) {
       variationOrSizeHeader = "Sizes";
     } else {
       variationOrSizeHeader = "Variations";
     }
   }
-
   const tableBorder = "border border-slate-400";
   return (
     <div className="flex flex-col items-center">
@@ -46,14 +57,36 @@ function StoreItemVariationDisplay({
         <tbody>
           <tr>
             <td className={`${tableBorder}`}>Current Stock</td>
+            <td className={`${tableBorder}`}>Total Stock</td>
             <td className={`${tableBorder}`}>Percentage</td>
           </tr>
           <tr>
             <td className={`${tableBorder}`}>
-              <StoreItemEditingBox
-                item={mainItem}
-                setQuantity={setMainItemQuantity}
-              />
+              {isLoggedIn?.ok && !hasSize ? (
+                <StoreItemEditingBox
+                  item={mainItem}
+                  setQuantity={setMainItemQuantity}
+                  quantity={mainItem.quantity}
+                  width="14"
+                  field="quantity"
+                  isLoggedIn={isLoggedIn}
+                />
+              ) : (
+                <p>{mainItem.quantity}</p>
+              )}
+            </td>
+            <td className={`${tableBorder}`}>
+              {isLoggedIn?.ok && !hasSize ? (
+                <StoreItemEditingBox
+                  item={mainItem}
+                  setQuantity={setMainItemOriginalQuantity}
+                  quantity={mainItem.originalQuantity}
+                  width="14"
+                  field="originalQuantity"
+                />
+              ) : (
+                <p>{mainItem.originalQuantity}</p>
+              )}
             </td>
             <td className={`${tableBorder}`}>
               <div
@@ -70,8 +103,9 @@ function StoreItemVariationDisplay({
           <VariationTable
             mainItem={mainItem}
             variations={variations}
-            setVariations={setVariations}
+            setVariationQuantity={setVariationQuantity}
             variationOrSizeHeader={variationOrSizeHeader}
+            isLoggedIn={isLoggedIn}
           />
         </div>
       ) : (

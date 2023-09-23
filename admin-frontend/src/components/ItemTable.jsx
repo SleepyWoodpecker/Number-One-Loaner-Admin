@@ -40,7 +40,7 @@ function ItemTable({ storeItems }) {
                 <td className={`${tableBorder} text-center`}>
                   <Link to={`/store/${storeItem.id}`}>
                     <p
-                      className="border-0 w-full"
+                      className="border-0 w-full underline decoration-solid"
                       style={{ overflowWrap: "break-word" }}
                     >
                       {storeItem.name}

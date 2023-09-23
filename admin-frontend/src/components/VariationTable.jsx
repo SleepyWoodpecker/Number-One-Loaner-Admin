@@ -4,8 +4,9 @@ import StoreItemEditingBox from "./StoreItemEditingBox";
 function VariationTable({
   mainItem,
   variations,
-  setVariations,
+  setVariationQuantity,
   variationOrSizeHeader,
+  isLoggedIn,
 }) {
   const tableBorder = "border border-slate-400";
   return (
@@ -14,6 +15,7 @@ function VariationTable({
         <tr>
           <td className={`${tableBorder}`}>{variationOrSizeHeader}</td>
           <td className={`${tableBorder}`}>Current Stock</td>
+          <td className={`${tableBorder}`}>Total Stock</td>
           <td className={`${tableBorder}`}>Percentage</td>
         </tr>
       </thead>
@@ -40,13 +42,33 @@ function VariationTable({
                   .replace(")", "")}
               </td>
               <td className={`${tableBorder}`}>
-                <StoreItemEditingBox item={variation} setMainItem />
+                {isLoggedIn?.ok ? (
+                  <StoreItemEditingBox
+                    item={variation}
+                    quantity={variation.quantity}
+                    setQuantity={setVariationQuantity}
+                    field="quantity"
+                  />
+                ) : (
+                  <p>{variation.quantity}</p>
+                )}
+              </td>
+              <td className={`${tableBorder}`}>
+                {isLoggedIn?.ok ? (
+                  <StoreItemEditingBox
+                    item={variation}
+                    quantity={variation.originalQuantity}
+                    field="originalQuantity"
+                  />
+                ) : (
+                  <p>{variation.originalQuantity}</p>
+                )}
               </td>
               <td className={`${tableBorder}`}>
                 <div
                   className={`bg-${cellColoring}-200 rounded-md p-1 mx-5 my-2 flex justify-center`}
                 >
-                  {stockPercentage}
+                  {stockPercentage}%
                 </div>
               </td>
             </tr>

@@ -23,6 +23,20 @@ function StoreItemPage() {
     setMainItem((mainItem) => ({ ...mainItem, quantity: newQuantity }));
   };
 
+  const setMainItemOriginalQuantity = (id, newQuantity) => {
+    setMainItem((mainItem) => ({ ...mainItem, originalQuantity: newQuantity }));
+  };
+
+  const setVariationQuantity = (id, newQuantity) => {
+    setVariations((variations) =>
+      variations.map((variation) => {
+        return variation.id === id
+          ? { ...variation, quantity: newQuantity }
+          : { ...variation };
+      })
+    );
+  };
+  console.log(variations);
   return mainItem ? (
     <div>
       <Link to="/">
@@ -44,8 +58,9 @@ function StoreItemPage() {
           <StoreItemVariationDisplay
             mainItem={mainItem}
             setMainItemQuantity={setMainItemQuantity}
+            setMainItemOriginalQuantity={setMainItemOriginalQuantity}
             variations={variations}
-            setVariations={setVariations}
+            setVariationQuantity={setVariationQuantity}
           />
         </div>
       </div>

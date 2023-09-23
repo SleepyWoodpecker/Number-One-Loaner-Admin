@@ -163,6 +163,14 @@ async function checkUserLogin() {
   return userLogin;
 }
 
+async function adjustStoreQuantity(updatedItem) {
+  const { data: modifiedItem } = await axios.put(
+    `${storeBaseUrl}/adjustStoreQuantity`,
+    updatedItem
+  );
+  return modifiedItem;
+}
+
 export {
   getStoreItems,
   getRequests,
@@ -178,4 +186,5 @@ export {
   findAllVariations,
   findAllAssociatedRequests,
   checkUserLogin,
+  adjustStoreQuantity,
 };
