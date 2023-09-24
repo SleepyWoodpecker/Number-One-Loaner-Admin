@@ -10,6 +10,7 @@ function StoreItemEditingBox({
   field,
   quantity,
   width = 10,
+  setMainItemTargetQuantity,
 }) {
   const originalQuantity = useRef(quantity);
   const [isEditing, setIsEditing] = useState(false);
@@ -19,21 +20,28 @@ function StoreItemEditingBox({
   };
   const handleCloseEditor = () => {
     setIsEditing(false);
+    setNewQuantity(originalQuantity.current);
   };
+  const hasSize = Boolean(item.consolidatedItemId);
   // missing verification
   const handleChangeQuantity = async (field) => {
-    setQuantity(item.id, newQuantity);
     if (quantity === "") {
-      setNewQuantity(originalQuantity.current);
+      return setNewQuantity(originalQuantity.current);
     }
-    await adjustStoreQuantity({
+    setQuantity(item.id, newQuantity);
+    const newItem = await adjustStoreQuantity({
       ...item,
-      quantity: newQuantity,
-      type: item.consolidatedItemId ? "variation" : "main",
+      newQuantity,
+      type: hasSize ? "variation" : "main",
       field,
       preEditingQuantity: originalQuantity.current,
     });
-
+    console.log(newItem);
+    // if there are variations present, edit the main item also
+    if (hasSize) {
+      setMainItemTargetQuantity(item.consolidatedItemId, newItem[field]);
+    }
+    originalQuantity.current = newQuantity;
     handleCloseEditor();
   };
   return (
@@ -60,7 +68,7 @@ function StoreItemEditingBox({
               color="#807d7d"
             />
           </div>
-          <p className={item.consolidatedItemId ? "mr-2" : ""}>{newQuantity}</p>
+          <p className={hasSize ? "mr-2" : ""}>{newQuantity}</p>
         </>
       )}
       <div className={`w-${width} h-0`}></div>

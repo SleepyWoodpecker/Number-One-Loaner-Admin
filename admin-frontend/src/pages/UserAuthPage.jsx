@@ -93,6 +93,14 @@ function UserAuthPage({ changeActivePage }) {
             Add Items To Store
           </div>
         </div>
+        <div className="flex flex-col justify-center items-center mt-8">
+          <div
+            className="w-60 bg-orange-200 rounded-md p-1 text-center"
+            onClick={() => changeActivePage("Store Items")}
+          >
+            Edit Store Items
+          </div>
+        </div>
       </div>
     );
   }

@@ -5,8 +5,11 @@ function VariationTable({
   mainItem,
   variations,
   setVariationQuantity,
+  setVariationOriginalQuantity,
   variationOrSizeHeader,
   isLoggedIn,
+  setMainItemQuantity,
+  setMainItemOriginalQuantity,
 }) {
   const tableBorder = "border border-slate-400";
   return (
@@ -48,6 +51,7 @@ function VariationTable({
                     quantity={variation.quantity}
                     setQuantity={setVariationQuantity}
                     field="quantity"
+                    setMainItemTargetQuantity={setMainItemQuantity}
                   />
                 ) : (
                   <p>{variation.quantity}</p>
@@ -58,7 +62,9 @@ function VariationTable({
                   <StoreItemEditingBox
                     item={variation}
                     quantity={variation.originalQuantity}
+                    setQuantity={setVariationOriginalQuantity}
                     field="originalQuantity"
+                    setMainItemTargetQuantity={setMainItemOriginalQuantity}
                   />
                 ) : (
                   <p>{variation.originalQuantity}</p>

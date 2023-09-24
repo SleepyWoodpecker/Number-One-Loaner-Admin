@@ -11,6 +11,7 @@ function StoreItemVariationDisplay({
   setMainItemOriginalQuantity,
   variations,
   setVariationQuantity,
+  setVariationOriginalQuantity,
 }) {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   useEffect(() => {
@@ -104,8 +105,11 @@ function StoreItemVariationDisplay({
             mainItem={mainItem}
             variations={variations}
             setVariationQuantity={setVariationQuantity}
+            setVariationOriginalQuantity={setVariationOriginalQuantity}
             variationOrSizeHeader={variationOrSizeHeader}
             isLoggedIn={isLoggedIn}
+            setMainItemQuantity={setMainItemQuantity}
+            setMainItemOriginalQuantity={setMainItemOriginalQuantity}
           />
         </div>
       ) : (
