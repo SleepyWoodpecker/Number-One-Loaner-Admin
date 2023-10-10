@@ -5,7 +5,7 @@ import {
   addNewCalendarEvent,
   updateStoreItemsPostRequest,
 } from "../services";
-import { RequestContext } from "../App";
+import { RequestContext } from "../pages/MainPage";
 import { compareDates } from "../Functions";
 
 function RequestDetailModal({

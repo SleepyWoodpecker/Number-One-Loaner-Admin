@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import Modal from "./Modal";
 import { deleteRequest, checkUserLogin } from "../services";
 import { showFeedbackMessage } from "../Functions";
-import { RequestContext } from "../App";
+import { RequestContext } from "../pages/MainPage";
 
 function CompleteOrderModal({ request, setRequestList, closeModal }) {
   const { setMessage, handleAuthClick } = useContext(RequestContext);

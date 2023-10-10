@@ -33,9 +33,15 @@ function checkEmptyObject(obj) {
   return true;
 }
 
+function capitaliseFirstLetter(string) {
+  const [firstLetter, otherLetters] = [string.slice(0, 1), string.slice(1)];
+  return [firstLetter.toUpperCase(), otherLetters.toLowerCase()].join("");
+}
+
 export {
   compareDates,
   validateQuantity,
   showFeedbackMessage,
   checkEmptyObject,
+  capitaliseFirstLetter,
 };

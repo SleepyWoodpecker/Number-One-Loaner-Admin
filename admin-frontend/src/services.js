@@ -91,27 +91,27 @@ const loginUser = async (username, password) => {
 };
 
 // still incomplete
-const addNewStoreItem = async (imageData) => {
+const addNewStoreItem = async (itemData) => {
   const formData = new FormData();
-  formData.append("image", imageData.image);
+  formData.append("image", itemData.image);
   formData.append("key", process.env.REACT_APP_IMGBB_API_KEY);
-  formData.append("name", imageData.itemName);
+  formData.append("name", itemData.itemName);
   const imageUpload = await axios.post(
     `https://api.imgbb.com/1/upload`,
     formData
   );
-  console.log(imageUpload);
   const imgUrl = imageUpload.data.data.display_url;
-  const initialQuantity =
-    imageData.hasSize === "Yes"
-      ? imageData.sizes.reduce((acc, size) => acc + Number(size.quantity), 0)
-      : imageData.itemQuantity;
+  // const initialQuantity =
+  //   itemData.hasSize === "Yes"
+  //     ? itemData.sizes.reduce((acc, size) => acc + Number(size.quantity), 0)
+  //     : itemData.itemQuantity;
   const mainItemData = {
-    name: imageData.itemName,
-    quantity: initialQuantity,
+    name: itemData.itemName,
+    quantity: itemData.itemQuantity,
     imgUrl,
-    originalQuantity: initialQuantity,
-    sizes: imageData.sizes.map((item) => item.size),
+    originalQuantity: itemData.itemQuantity,
+    sizes: itemData.sizes.map((item) => item.size),
+    category: itemData.category,
   };
 
   const { data: uploadedMainItemData } = await axios.post(
@@ -119,23 +119,23 @@ const addNewStoreItem = async (imageData) => {
     mainItemData
   );
   let variationRequest;
-  if (imageData.hasSize === "Yes") {
+  if (itemData.hasSize === "Yes") {
     // if there are sizes, add a new entry in the DB for each size
-    variationRequest = imageData.sizes.map((variation) => {
+    variationRequest = itemData.sizes.map((variation) => {
       const data = {
-        name: `${imageData.itemName} - (${
+        name: `${itemData.itemName} - (${
           validateQuantity(variation.size) ? `Size` : ""
         } ${variation.size})`,
         quantity: variation.quantity,
         originalQuantity: variation.quantity,
         imgUrl,
         consolidatedItemId: uploadedMainItemData.id,
+        category: itemData.category,
       };
       return axios.post(storeBaseUrl, data);
     });
 
-    const [item1, item2] = await Promise.all(variationRequest);
-    console.log(item1, item2);
+    await Promise.all(variationRequest);
   }
 
   return uploadedMainItemData;
@@ -171,6 +171,11 @@ async function adjustStoreQuantity(updatedItem) {
   return modifiedItem;
 }
 
+async function deleteStoreItem(id) {
+  const { data: deletedItem } = await axios.delete(`${storeBaseUrl}/${id}`);
+  return deletedItem;
+}
+
 export {
   getStoreItems,
   getRequests,
@@ -187,4 +192,5 @@ export {
   findAllAssociatedRequests,
   checkUserLogin,
   adjustStoreQuantity,
+  deleteStoreItem,
 };

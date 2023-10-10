@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import EmbeddedCalendar from "../components/EmbeddedCalendar";
 import Carousell from "../components/Carousell";
-import { RequestContext } from "../App";
+import { RequestContext } from "../pages/MainPage";
 import RequestTab from "../components/RequestTab";
 
 function RequestsPage({ storeItems, setStoreItems }) {

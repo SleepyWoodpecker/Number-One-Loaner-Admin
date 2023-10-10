@@ -5,11 +5,17 @@ import { RiImageAddLine } from "react-icons/ri";
 import { addNewStoreItem } from "../services";
 import DropdownMenu from "../components/DropdownMenu";
 import ListSizeMenu from "../components/ListSizeMenu";
-import { checkEmptyObject, showFeedbackMessage } from "../Functions";
-import { RequestContext } from "../App";
+import {
+  capitaliseFirstLetter,
+  checkEmptyObject,
+  showFeedbackMessage,
+  validateQuantity,
+} from "../Functions";
+import { RequestContext } from "../pages/MainPage";
+import { useNavigate } from "react-router-dom";
 
-function AddStoreItemPage({ changeActivePage }) {
-  const { setMessage } = useContext(RequestContext);
+function AddStoreItemPage({ changeActivePage, categories }) {
+  const { setMessage, setStoreItems } = useContext(RequestContext);
   // need perform user verification first
   const [storeItemInformation, setStoreItemInformation] = useState({
     itemName: "",
@@ -18,9 +24,11 @@ function AddStoreItemPage({ changeActivePage }) {
     sizes: [],
     image: null,
     preview: null,
+    category: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [tempCategory, setTempCategory] = useState("");
+  const navigate = useNavigate();
   const uploadFile = () => {
     document.querySelector("#storeItemImage").click();
   };
@@ -43,13 +51,35 @@ function AddStoreItemPage({ changeActivePage }) {
   };
 
   const handleSubmit = async () => {
-    if (!checkEmptyObject(storeItemInformation)) {
+    const storeEntry = {
+      ...storeItemInformation,
+      category: storeItemInformation.category.toLowerCase(),
+    };
+
+    if (storeItemInformation.hasSize === "Yes") {
+      const totalQuantity = storeItemInformation.sizes.reduce(
+        (acc, size) => acc + Number(size.quantity),
+        0
+      );
+      storeEntry.itemQuantity = totalQuantity;
+    }
+
+    if (!checkEmptyObject(storeEntry)) {
       showFeedbackMessage(`All fields must be filled`, "red", setMessage, 4000);
       return;
     }
+
+    if (!validateQuantity(storeItemInformation.itemQuantity)) {
+      showFeedbackMessage(`Quantity must be a number`, "red", setMessage, 4000);
+      return;
+    }
     setIsSubmitting(true);
-    const newItem = await addNewStoreItem(storeItemInformation);
-    console.log(newItem);
+    // fix casing for the store items
+    const newItem = await addNewStoreItem(storeEntry);
+    setStoreItems((storeItems) => ({
+      ...storeItems,
+      items: [...storeItems.items, newItem],
+    }));
     showFeedbackMessage(
       `${newItem.name} added to the store list`,
       "green",
@@ -63,9 +93,36 @@ function AddStoreItemPage({ changeActivePage }) {
       sizes: [],
       image: null,
       preview: null,
+      category: "",
     });
     setIsSubmitting(false);
+    setTempCategory("");
+    return navigate(`/store/${newItem.id}`);
   };
+
+  const displayCategories = [...categories, "new category"].map((category) =>
+    capitaliseFirstLetter(category)
+  );
+  const handleIsNewCategoryInput = (e) => {
+    const input = e.target.value;
+    if (
+      categories.find(
+        (category) => category.toLowerCase() === input.toLowerCase()
+      )
+    ) {
+      setStoreItemInformation((storeItemInformation) => ({
+        ...storeItemInformation,
+        category: input,
+      }));
+    } else {
+      setStoreItemInformation((storeItemInformation) => ({
+        ...storeItemInformation,
+        category: "",
+      }));
+    }
+    setTempCategory(e.target.value);
+  };
+
   const formMargin = "mt-2";
   const sizeInformationOptions = ["Yes", "No"];
 
@@ -88,6 +145,7 @@ function AddStoreItemPage({ changeActivePage }) {
       />
     );
   }
+
   return (
     <>
       <IoIosArrowRoundBack
@@ -141,6 +199,26 @@ function AddStoreItemPage({ changeActivePage }) {
             isForm
           />
         </div>
+
+        <div className={`${formMargin}`}>
+          <DropdownMenu
+            input={tempCategory}
+            desiredValue="Category"
+            handleInputChange={handleIsNewCategoryInput}
+            options={displayCategories}
+          />
+        </div>
+        {tempCategory === "New category" && (
+          <div className={`${formMargin}`}>
+            <CustomInput
+              desiredValue="New Category"
+              input={storeItemInformation.category}
+              width="full"
+              handleInputChange={(e) => handleStoreItemInput(e, "category")}
+              isForm
+            />
+          </div>
+        )}
         <div className={`${formMargin}`}>
           <DropdownMenu
             input={storeItemInformation.hasSize}

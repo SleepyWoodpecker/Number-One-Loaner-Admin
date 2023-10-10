@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import Modal from "./Modal";
 import { updateRequest, updateStoreItemsPostSizing } from "../services";
 import EditingBox from "./EditingBox";
-import { RequestContext } from "../App";
+import { RequestContext } from "../pages/MainPage";
 import { compareDates } from "../Functions";
 
 // need to fix the CSS here

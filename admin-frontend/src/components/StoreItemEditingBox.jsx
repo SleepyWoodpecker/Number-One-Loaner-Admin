@@ -36,7 +36,6 @@ function StoreItemEditingBox({
       field,
       preEditingQuantity: originalQuantity.current,
     });
-    console.log(newItem);
     // if there are variations present, edit the main item also
     if (hasSize) {
       setMainItemTargetQuantity(item.consolidatedItemId, newItem[field]);
@@ -71,7 +70,6 @@ function StoreItemEditingBox({
           <p className={hasSize ? "mr-2" : ""}>{newQuantity}</p>
         </>
       )}
-      <div className={`w-${width} h-0`}></div>
     </div>
   );
 }

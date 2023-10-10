@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import CustomInput from "../components/CustomInput";
 import { loginUser, checkUserLogin } from "../services";
 import { showFeedbackMessage } from "../Functions";
-import { RequestContext } from "../App";
+import { RequestContext } from "../pages/MainPage";
 
 function UserAuthPage({ changeActivePage }) {
   const [username, setUsername] = useState("");

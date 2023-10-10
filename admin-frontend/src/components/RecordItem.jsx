@@ -114,9 +114,7 @@ function RecordItem({
             : request.sizingDate}
         </p>
         <div
-          className={`bg-${color}-200 text-center rounded-md flex items-center justify-center ${
-            type === "Item Tracking" ? "text-xs" : "text-sm"
-          } mx-2 px-3`}
+          className={`bg-${color}-200 text-center rounded-md flex items-center justify-center text-xs mx-2 px-3`}
           style={{ width: "6.5rem" }}
         >
           {requestStatus}

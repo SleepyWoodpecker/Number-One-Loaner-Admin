@@ -87,7 +87,7 @@ function CustomInput({
         value={input}
         onChange={handleFormInput}
         type={inputType}
-        className={`focus-visible:outline-orange-400 border-2 px-1 py-0.5 justify-self-end rounded-md w-${width} ${
+        className={`focus-visible:outline-orange-400 border-2 px-1.5 py-0.5 justify-self-end rounded-md w-${width} ${
           isForm ? "" : "text-center"
         }`}
         onFocus={formInformation ? showInfo : returnFn}

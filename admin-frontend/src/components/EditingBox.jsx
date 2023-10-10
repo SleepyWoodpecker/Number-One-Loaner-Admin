@@ -3,7 +3,7 @@ import CustomInput from "./CustomInput";
 import { BsCheck2, BsX } from "react-icons/bs";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { validateQuantity, showFeedbackMessage } from "../Functions";
-import { RequestContext } from "../App";
+import { RequestContext } from "../pages/MainPage";
 
 function EditingBox({
   quantity,

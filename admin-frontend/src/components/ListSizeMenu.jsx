@@ -7,7 +7,7 @@ import {
   showFeedbackMessage,
   validateQuantity,
 } from "../Functions";
-import { RequestContext } from "../App";
+import { RequestContext } from "../pages/MainPage";
 
 function ListSizeMenu({ data, setData }) {
   const { setMessage } = useContext(RequestContext);
