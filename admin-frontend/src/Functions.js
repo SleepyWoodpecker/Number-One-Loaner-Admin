@@ -23,6 +23,11 @@ function validateQuantity(number) {
   return numberRegex.test(number);
 }
 
+function validateSizeQuantity(number) {
+  const numberRegex = /^\d*\.?\d*$/;
+  return numberRegex.test(number);
+}
+
 function checkEmptyObject(obj) {
   for (const [key, value] of Object.entries(obj)) {
     if (!key || !value) {
@@ -41,6 +46,7 @@ function capitaliseFirstLetter(string) {
 export {
   compareDates,
   validateQuantity,
+  validateSizeQuantity,
   showFeedbackMessage,
   checkEmptyObject,
   capitaliseFirstLetter,

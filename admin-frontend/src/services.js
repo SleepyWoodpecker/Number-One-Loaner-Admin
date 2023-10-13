@@ -1,5 +1,5 @@
 import axios from "axios";
-import { validateQuantity } from "./Functions";
+import { validateSizeQuantity } from "./Functions";
 const storeBaseUrl = "/api/store";
 const requestBaseUrl = "/api/request";
 const userBaseUrl = "/api/user";
@@ -124,8 +124,8 @@ const addNewStoreItem = async (itemData) => {
     variationRequest = itemData.sizes.map((variation) => {
       const data = {
         name: `${itemData.itemName} - (${
-          validateQuantity(variation.size) ? `Size` : ""
-        } ${variation.size})`,
+          validateSizeQuantity(variation.size) ? `Size` : ""
+        }${variation.size})`,
         quantity: variation.quantity,
         originalQuantity: variation.quantity,
         imgUrl,

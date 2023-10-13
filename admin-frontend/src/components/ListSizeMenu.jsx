@@ -102,7 +102,7 @@ function ListSizeMenu({ data, setData }) {
           handleInputChange={(e) =>
             setNewVariation((newVariation) => ({
               ...newVariation,
-              size: e.target.value.replace(" ", ""),
+              size: e.target.value,
             }))
           }
         />

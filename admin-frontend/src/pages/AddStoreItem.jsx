@@ -69,7 +69,10 @@ function AddStoreItemPage({ changeActivePage, categories }) {
       return;
     }
 
-    if (!validateQuantity(storeItemInformation.itemQuantity)) {
+    if (
+      !validateQuantity(storeItemInformation.itemQuantity) &&
+      storeItemInformation.hasSize === "No"
+    ) {
       showFeedbackMessage(`Quantity must be a number`, "red", setMessage, 4000);
       return;
     }
