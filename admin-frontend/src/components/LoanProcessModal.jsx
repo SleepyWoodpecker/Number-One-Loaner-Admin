@@ -1,6 +1,10 @@
 import React, { useContext } from "react";
 import Modal from "./Modal";
-import { updateRequest, updateStoreItemsPostSizing } from "../services";
+import {
+  addNewCalendarEvent,
+  updateRequest,
+  updateStoreItemsPostSizing,
+} from "../services";
 import EditingBox from "./EditingBox";
 import { RequestContext } from "../pages/MainPage";
 import { compareDates } from "../Functions";
@@ -13,6 +17,8 @@ function LoanProcessModal({
   storeItems,
   setStoreItems,
 }) {
+  console.log(request);
+
   // not sure if this works yet...
   const { setReturnAppointments } = useContext(RequestContext);
   const handleLoanApproval = async () => {
@@ -39,6 +45,17 @@ function LoanProcessModal({
       returnAppointments
         .concat(recordedNewRequest)
         .sort((a, b) => compareDates(a.sizingDate, b.sizingDate))
+    );
+
+    // set an appointment for the uniform return
+    const [hours, minutes] = request.time.split(":");
+    const [year, month, day] = request.returnDate.split("-");
+    await addNewCalendarEvent(
+      request.unit,
+      [year, month - 1, day, hours, minutes],
+      [year, month - 1, day, Number(hours) + 3, minutes],
+      request.email,
+      "return"
     );
     closeModal();
   };

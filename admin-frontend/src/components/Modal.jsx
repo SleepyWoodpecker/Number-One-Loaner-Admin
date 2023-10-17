@@ -17,7 +17,7 @@ function Modal({ children, handleModalClose }) {
         {children}
       </div>
       <div
-        className="h-full w-full fixed inset-0 bg-gray-500 opacity-50 fixed z-10"
+        className="h-full w-full inset-0 bg-gray-500 opacity-50 fixed z-10"
         onClick={handleModalClose}
       ></div>
     </div>,

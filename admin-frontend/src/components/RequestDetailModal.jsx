@@ -6,7 +6,7 @@ import {
   updateStoreItemsPostRequest,
 } from "../services";
 import { RequestContext } from "../pages/MainPage";
-import { compareDates } from "../Functions";
+import { compareDates, showFeedbackMessage } from "../Functions";
 
 function RequestDetailModal({
   closeModal,
@@ -17,7 +17,7 @@ function RequestDetailModal({
   setStoreItems,
 }) {
   const generalButton = "rounded-md shadow-sm w-24 p-1";
-  const { setSizingAppointments } = useContext(RequestContext);
+  const { setSizingAppointments, setMessage } = useContext(RequestContext);
 
   const processReq = async (status) => {
     const newRequest = await updateRequest(request.id, {
@@ -47,11 +47,26 @@ function RequestDetailModal({
         request.unit,
         [year, month - 1, day, hours, minutes],
         [year, month - 1, day, Number(hours) + 3, minutes],
-        request.email
+        request.email,
+        "sizing"
       );
-
       const storeResponse = await updateStoreItemsPostRequest(request);
+      const lowStockItems = [];
+      storeResponse.forEach((storeItem) => {
+        if (storeItem.quantity / storeItem.originalQuantity < 0.2) {
+          lowStockItems.push(storeItem.name);
+        }
+      });
+      if (lowStockItems.length > 0) {
+        showFeedbackMessage(
+          `The following items are low on stock: ${lowStockItems.join(", ")}`,
+          "red",
+          setMessage,
+          5000
+        );
+      }
       const newList = storeItems.items.map((storeItem) => {
+        // only change the quantity of the consolidates items
         const listLocation = storeResponse.findIndex(
           (responseItem) => storeItem.id === responseItem.id
         );

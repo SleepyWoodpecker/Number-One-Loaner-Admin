@@ -33,13 +33,15 @@ const addNewCalendarEvent = async (
   requestingUnit,
   startTime,
   endTime,
-  guestEmail
+  guestEmail,
+  eventType
 ) => {
   await axios.post(`/api/calendar`, {
     requestingUnit,
     startTime,
     endTime,
     guestEmail,
+    eventType,
   });
   return { ok: "true" };
 };
@@ -124,7 +126,7 @@ const addNewStoreItem = async (itemData) => {
     variationRequest = itemData.sizes.map((variation) => {
       const data = {
         name: `${itemData.itemName} - (${
-          validateSizeQuantity(variation.size) ? `Size` : ""
+          validateSizeQuantity(Number(variation.size)) ? `Size ` : ""
         }${variation.size})`,
         quantity: variation.quantity,
         originalQuantity: variation.quantity,

@@ -54,7 +54,7 @@ function StoreItemVariationDisplay({
         alt={mainItem.name}
       ></img>
       <p className="mt-2 text-lg font-semibold">{mainItem.name}</p>
-      <table className="w-full text-center table-fixed border-collapse border border-slate-500 text-center mt-2">
+      <table className="w-full text-center table-fixed border-collapse border border-slate-500  mt-2">
         <tbody>
           <tr>
             <td className={`${tableBorder}`}>Current Stock</td>
